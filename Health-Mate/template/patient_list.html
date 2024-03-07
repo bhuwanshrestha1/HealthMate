@@ -1,0 +1,96 @@
+{% extends 'admin_base.html' %}
+{% block title %}Patient List{% endblock %}
+{% block head %}
+<style>
+    .container {
+        margin-top: 50px;
+        text-align: center;
+    }
+
+    h2 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .patient-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .patient-table th, .patient-table td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .patient-table {
+        background-color: #fff;
+        transition: background-color 0.3s ease;
+    }
+
+    .patient-table:hover {
+        background-color: #f9f9f9;
+    }
+
+    .patient-table th {
+        background-color: #f2f2f2;
+    }
+
+    .patient-table td img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin-top: 8px;
+    }
+
+    
+    /* Add more styles as needed */
+</style>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <h2>Patient List</h2>
+        <table class="patient-table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                  
+                    <th>Email</th>
+                    <th>Age</th>
+                    <th>Contact</th>
+                    <th>Sex</th>
+                    <th>Joined Date</th>
+                    <th>Address</th>
+                    <th>Profile Image</th>
+                    <!-- Add more fields as needed -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for patient in patients %}
+                    <tr>
+                        <td>{{ patient.username }}</td>
+                        
+                        <td>{{ patient.email }}</td>
+                        <td>{{ patient.age }}</td>
+                        <td>{{ patient.contact }}</td>
+                        <td>{{ patient.sex }}</td>
+                        <td>{{ patient.joined_date }}</td>
+                        <td>{{ patient.address }}</td>
+                        <td>
+                            {% if patient.profile_image %}
+                                <img src="{{ patient.profile_image.url }}" alt="{{ patient.username }} Profile Image" width="50">
+                            {% else %}
+                                No Image
+                            {% endif %}
+                        </td>
+                        <!-- Add more fields as needed -->
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+    </div>
+{% endblock %}

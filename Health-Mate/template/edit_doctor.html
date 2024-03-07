@@ -1,0 +1,37 @@
+{% extends 'admin_base.html' %}
+{% block title %}Edit Doctor - {{ doctor.user.username }}{% endblock %}
+{% block head %}
+    <style>
+        /* Your additional styles for the edit page */
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <h2>Edit Doctor - {{ doctor.user.username }}</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <!-- Add fields for editing doctor information -->
+            <label for="qualification">Qualification:</label>
+            <input type="text" id="qualification" name="qualification" value="{{ doctor.qualification }}" required>
+
+            <label for="specialities">Specialities:</label>
+            <input type="text" id="specialities" name="specialities" value="{{ doctor.specialities }}" required>
+
+            <label for="hospital">Hospital:</label>
+            <input type="text" id="hospital" name="hospital" value="{{ doctor.hospital }}" required>
+
+            <label for="start_time">Start Time:</label>
+            <input type="text" id="start_time" name="start_time" value="{{ doctor.start_time }}" required>
+
+            <label for="end_time">End Time:</label>
+            <input type="text" id="end_time" name="end_time" value="{{ doctor.end_time }}" required>
+
+            <!-- Add other fields as needed -->
+
+            <label for="profile_image">Profile Image:</label>
+            <input type="file" id="profile_image" name="profile_image">
+
+            <input type="submit" value="Save Changes">
+        </form>
+    </div>
+{% endblock %}

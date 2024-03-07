@@ -1,0 +1,292 @@
+{% extends 'patient_profile_base.html' %}
+{% load custom_filters %}
+{% block title %}Book Appointment Now{% endblock %}
+
+{% block head %}
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Arial', sans-serif;
+        background-color: #f5f5f5;
+    }
+
+    .appointment-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .doctor-info {
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        background-color: rgb(249, 249, 249);
+        margin-bottom: 20px;
+    }
+
+    .profile-image {
+        width: 100px;
+        height: 100px;
+        border-radius: 50px;
+    }
+
+    .book-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .book-input {
+        margin-bottom: 10px;
+    }
+
+    .book-button {
+        background-color: peru;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .book-button:hover {
+        transform: scale(1.06);
+        background-color: red;
+    }
+
+    .calendar {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        margin-bottom: 20px;
+    }
+
+    .calendar label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .calendar select {
+        width: 250px;
+        padding: 8px;
+        margin-bottom: 10px;
+    }
+
+    .time-picker {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .time-picker label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .time-picker select {
+        width: 45%;
+        padding: 8px;
+        margin-bottom: 10px;
+    }
+
+    .confirmation-dialog-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+    }
+
+    .confirmation-dialog {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        text-align: center;
+        width: 500px;
+    }
+
+    .confirmation-dialog p {
+        margin: 10px 0;
+    }
+
+    .confirmation-dialog-buttons {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .confirmation-dialog button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+    }
+
+    .confirmation-dialog #confirm-button {
+        background-color: peru;
+        color: #fff;
+    }
+
+    .confirmation-dialog #confirm-button:hover {
+        background-color: red;
+        color: #fff;
+    }
+
+    .confirmation-dialog #cancel-button {
+        background-color: red;
+        color: white;
+    }
+    .alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+.booked-time {
+    background-color: #FFCCCC; /* You can adjust the color as needed */
+}
+</style>
+
+<script>
+    
+        
+    document.addEventListener('DOMContentLoaded', function () {
+        // Disable booked time slots
+        var appointmentTimeSelect = document.getElementById('appointment_time');
+        var bookedTimeOptions = document.querySelectorAll('.booked-time');
+
+        bookedTimeOptions.forEach(function (option) {
+            option.disabled = true;
+        });
+
+        var bookButton = document.querySelector('.book-button');
+        var confirmationDialogContainer = document.querySelector('.confirmation-dialog-container');
+        var confirmButton = document.getElementById('confirm-button');
+        var cancelButton = document.getElementById('cancel-button');
+
+        if (bookButton && confirmationDialogContainer && confirmButton && cancelButton) {
+            bookButton.addEventListener('click', function () {
+                confirmationDialogContainer.style.display = 'flex';
+            });
+
+            confirmButton.addEventListener('click', function () {
+                var appointmentForm = document.getElementById('appointment-form');
+                if (appointmentForm) {
+                    appointmentForm.submit();
+                }
+            });
+
+            cancelButton.addEventListener('click', function () {
+                confirmationDialogContainer.style.display = 'none';
+            });
+
+        }
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+
+<div style="background-color: red;">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert"style="color: {% if message.tags == 'success' %}green{% else %}red{% endif %};">
+        <strong style="color: black;">{{ message }}</strong> 
+      </div>
+    {% endfor %}
+  </div>
+
+<div class="appointment-container">
+    {% if doctor.user.id %}
+    <div class="doctor-info">
+        {% if doctor.user.profile_image %}
+            <img src="{{ doctor.user.profile_image.url }}" alt="{{ doctor.user.username }} profile" class="profile-image">
+        {% endif %}
+        <h3>Dr. {{ doctor.user.first_name }} {{ doctor.user.last_name }}</h3>
+        <h5 style="font-size: medium;color: blue;">{{ doctor.qualification }}</h5>
+        <p>------------------</p>
+        <h5 style="font-size: medium;color: blue;">{{ doctor.specialities }}</h5>
+        <p>Availability Time: {{ doctor.start_time }} - {{ doctor.end_time }}</p>
+        <p>Availability day:
+            {% for day in doctor.availability_days.all %}
+                {% with day_order=day.day|day_of_week_order %}
+                    {{ day.day }}
+                {% endwith %}
+                {% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+    </div>
+    <form id="appointment-form" method="post" action="{% url 'book_now' doctor.user.id %}"  enctype="multipart/form-data">
+        {% csrf_token %}
+         
+        <div class="calendar">
+            <label for="appointment_date">Select Appointment Date:</label>
+            <select name="appointment_date" id="appointment_date" required class="book-input">
+                {% for date_info in available_dates %}
+                    <option value="{{ date_info.date }}" {% if selected_appointment_date == date_info.date %}selected{% endif %}>{{ date_info.day }}, {{ date_info.date}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    
+        <div class="time-picker">
+            <label for="appointment_time">Select Appointment Time:</label>
+            <select name="appointment_time" id="appointment_time" required class="book-input">
+                {% for time_option in time_options %}
+                    {% with appointment_datetime=date|date:'Y-m-d' %}
+                        {% with selected_datetime=appointment_datetime|date:'Y-m-d' %}
+                            <option value="{{ time_option }}" {% if selected_appointment_time == time_option %}selected{% endif %}
+                                    {% if time_option in booked_time_slots %}class="booked-time" disabled{% endif %}
+                                    {% if time_option in booked_time_slots and selected_datetime == appointment_date %}style="background-color: red;"{% endif %}>
+                                {{ time_option }}
+                            </option>
+                        {% endwith %}
+                    {% endwith %}
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="book-input">
+            <label for="appointment_reason">Reason for Appointment:</label>
+            <textarea name="appointment_reason" id="appointment_reason" rows="4" required></textarea>
+        </div>
+
+        <div class="book-input">
+            <label for="old_reports">Upload Old Reports:</label>
+            <input type="file" name="old_reports" id="old_reports" accept=".pdf, .doc, .docx" required>
+        </div>
+
+        <button class="book-button" type="button">Book Now</button>
+    </form>
+    <div class="confirmation-dialog-container">
+        <div class="confirmation-dialog">
+            <p>Are you sure you want to book the appointment?</p>
+            <div class="confirmation-dialog-buttons">
+                <button id="confirm-button">Yes</button>
+                <button id="cancel-button">No</button>
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+    <p>Doctor ID is not available.</p>
+    {% endif %}
+</div>
+{% endblock %}

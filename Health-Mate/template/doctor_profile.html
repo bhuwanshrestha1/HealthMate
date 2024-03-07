@@ -1,0 +1,111 @@
+{% extends 'doctor_base.html' %}
+{% block title %}Doctor Profile{% endblock %}
+
+{% block head %}
+    <!-- Include any additional styles specific to this view -->
+    <link rel="stylesheet" href="your_custom_stylesheet.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        .dashboard-container {
+            background-color: #fff;
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            box-sizing: border-box;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+        }
+
+        .profile-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .details {
+            flex: 1;
+            margin-left: 20px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+
+        p {
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .back {
+        background-color: peru;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        }
+
+        .back:hover {
+            transform: scale(1.03);
+            background-color: red;
+        }
+        
+    </style>
+{% endblock %}
+   
+{% block content %}
+    <div class="dashboard-container">
+        <div class="profile-image">
+            {% if user.profile_image %}
+                <img src="{{ user.profile_image.url }}" alt="Profile Image">
+            {% else %}
+                <p>No profile image available</p>
+            {% endif %}
+        </div>
+        {% if user.is_authenticated %}
+            <div class="profile-details">
+                           
+                    <div class="details">
+                    <h1>Dr. {{ user.first_name }} {{ user.last_name }}</h1>
+                    <p>Username: {{ user.username }}</p>
+                    <p>Email: {{ user.email }}</p>
+                    <p>Contact: {{ user.contact }}</p>
+                    <p>Age: {{ user.age }}</p>
+                    <p>Sex: {{ user.sex }}</p>
+                    <p>Address: {{ user.address }}</p>
+                    <p>Joined Date: {{ user.joined_date|date:"F j, Y" }}</p>
+                </div>
+            </div>
+           <a href="/doctor_home" class="action-button"><button class="back">Back</button></a>
+        {% endif %}
+    </div>
+    
+{% endblock %}

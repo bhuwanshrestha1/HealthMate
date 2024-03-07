@@ -1,0 +1,123 @@
+{% extends 'admin_base.html' %}
+{% block title %}Add Doctor{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h2 style="color: white; text-align: center;">Add Doctor</h2>
+    <form method="post" enctype="multipart/form-data" style="max-width: 400px; margin: auto;">
+      {% csrf_token %}
+      {% if messages %}
+ <div class="alert alert-danger" role="alert" style="background-color: red;color: black;">
+   {% for message in messages %}
+     {{ message }}
+   {% endfor %}
+ </div>
+{% endif %}
+
+      
+      {% for error in user_form.non_field_errors %}
+        <p style="color: red;">{{ error }}</p>
+      {% endfor %}
+
+      {% for error in doctor_form.non_field_errors %}
+        <p style="color: red;">{{ error }}</p>
+      {% endfor %}
+
+      <label for="id_username">Username:</label>
+      <input type="text" name="dusername" placeholder="Enter username" required class="form-control">
+      
+      <label for="id_first_name">First Name:</label>
+      <input type="text" name="first_name" placeholder="Enter first name" required class="form-control">
+
+      <label for="id_last_name">Last Name:</label>
+      <input type="text" name="last_name" placeholder="Enter last name" required class="form-control">
+      
+      <label for="id_email">Email:</label>
+      <input type="email" name="demail" placeholder="Enter email" required class="form-control">
+
+      <label for="id_password">Password:</label>
+      <input type="password" name="dpassword" placeholder="Enter password" required class="form-control">
+
+      <label for="id_age">Age:</label>
+      <input type="number" name="dage" placeholder="Enter age" required class="form-control">
+
+      <label for="id_hsopital">Hospital:</label>
+      <input type="text" name="dhospital" placeholder="Enter hospital" required class="form-control">
+
+      <label for="id_contact">Contact:</label>
+      <input type="text" name="dcontact" placeholder="Enter contact" required class="form-control">
+
+      <label for="id_sex">Sex:</label>
+      <select name="dsex" required class="form-control">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        <option value="other">Other</option>
+      </select>
+
+      <label for="id_address">Address:</label>
+      <textarea name="daddress" placeholder="Enter address" required class="form-control"></textarea>
+
+      <label for="id_profile_image">Profile Image:</label>
+      <input type="file" name="profile_image" accept="image/*" class="form-control">
+
+      <label for="id_qualification">Qualification:</label>
+      <input type="text" name="qualification" placeholder="Enter qualification" required class="form-control">
+
+      <label for="id_specialities">Specialities:</label>
+      <input type="text" name="specialities" placeholder="Enter specialities" required class="form-control">
+
+      <label for="id_descriptions">Descriptions:</label>
+      <input type="text" name="descriptions" placeholder="Enter descriptions" required class="form-control">
+
+      <label for="id_availability_days">Availability Days:</label>
+      <div class="form-check">
+        <input type="checkbox" name="availability_days[]" value="monday" class="form-check-input">
+        <label class="form-check-label" for="id_availability_days_monday">Monday</label>
+    </div>
+    <div class="form-check">
+        <input type="checkbox" name="availability_days[]" value="tuesday" class="form-check-input">
+        <label class="form-check-label" for="id_availability_days_tuesday">Tuesday</label>
+    </div>
+      <div class="form-check">
+        <input type="checkbox" name="availability_days[]" value="wednesday" class="form-check-input">
+        <label class="form-check-label" for="id_availability_days_wednesday">Wednesday</label>
+      </div>
+      <div class="form-check">
+        <input type="checkbox" name="availability_days[]" value="thursday" class="form-check-input">
+        <label class="form-check-label" for="id_availability_days_thursday">Thursday</label>
+      </div>
+      <div class="form-check">
+        <input type="checkbox" name="availability_days[]" value="friday" class="form-check-input">
+        <label class="form-check-label" for="id_availability_days_friday">Friday</label>
+      </div>
+      <div class="form-check">
+        <input type="checkbox" name="availability_days[]" value="saturday" class="form-check-input">
+        <label class="form-check-label" for="id_availability_days_saturday">Saturday</label>
+      </div>
+      <div class="form-check">
+        <input type="checkbox" name="availability_days[]" value="sunday" class="form-check-input">
+        <label class="form-check-label" for="id_availability_days_sunday">Sunday</label>
+      </div>
+
+      <label for="id_start_time">Start Time:</label>
+      <input type="time" name="start_time" required class="form-control">
+
+      <label for="id_end_time">End Time:</label>
+      <input type="time" name="end_time" required class="form-control">
+
+      <label for="id_break_start1">Break Start Time 1:</label>
+      <input type="time" name="break_start1" required class="form-control">
+
+      <label for="id_break_end1">Break End Time 1:</label>
+      <input type="time" name="break_end1" required class="form-control">
+
+      <label for="id_break_start2">Break Start Time 2:</label>
+      <input type="time" name="break_start2" required class="form-control">
+
+      <label for="id_break_end2">Break End Time 2:</label>
+      <input type="time" name="break_end2" required class="form-control">
+
+      <button type="submit" style="background-color: red; color: white; margin-top: 15px;" class="btn btn-block">Add Doctor</button>
+    </form>
+  </div>
+{% endblock %}

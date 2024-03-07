@@ -1,0 +1,124 @@
+{% extends 'patient_profile_base.html' %}
+{% load custom_filters %}
+{% block title %}Book Appointment | No Recommendation{% endblock %}
+
+{% block head %}
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Arial', sans-serif;
+        background-color: #f5f5f5;
+    }
+    .doctors-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .doctor-card {
+        flex: 0 0 calc(40% - 5px); /* Adjust the width of each card as needed */
+        margin: 10px;
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        background-color: #fff;
+    }
+
+    .doctor-card p {
+        margin: 5px 0;
+    }
+    .doctor-card:hover {
+        transform: scale(1.01);
+        background-color:skyblue;
+    }
+
+    .profile-image {
+        width: 100px;
+        height: 100px;
+        border-radius: 50px;
+    }
+
+    .search-container {
+        margin-bottom: 20px;
+    }
+
+    .search-form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .search-form label {
+        margin-right: 10px;
+    }
+
+    .book{
+        background-color: peru;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    .book:hover{
+        transform: scale(1.06);
+        background-color: red;
+    }
+    
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="search-container">
+    <form method="GET" action="{% url 'book_no_recommendation' %}" class="search-form">
+        <label for="speciality">Filter by Speciality:</label>
+        <select name="speciality" id="speciality">
+            <option value="" {% if not selected_speciality %}selected{% endif %}>All Specialities</option>
+            {% for speciality in all_specialities %}
+                <option value="{{ speciality }}" {% if speciality == selected_speciality %}selected{% endif %}>{{ speciality }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Search</button>
+    </form>
+</div>
+
+<div class="doctors-container">
+    {% if doctors %}
+        {% for doctor in doctors %}
+       
+        
+        <div class="doctor-card">
+            {% if doctor.user.profile_image %}
+                <img src="{{ doctor.user.profile_image.url }}" alt="{{ doctor.user.username }} profile" class="profile-image">
+            {% endif %}
+            <h3>Dr. {{ doctor.user.first_name }} {{ doctor.user.last_name }}</h3>
+            <h5 style="font-size: medium;color: blue;">{{ doctor.qualification }}</h5>
+            <p>------------------</p>
+            <h5 style="font-size: medium;color: blue;">{{ doctor.specialities }}</h5>
+            <h5 style="font-size: medium;color: blue;">{{ doctor.hospital }}</h5>
+            <p>Availability day:
+                {% for day in doctor.availability_days.all %}
+                    {% with day_order=day.day|day_of_week_order %}
+                         {{ day.day }}
+                    {% endwith %}
+                    {% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+            <br>
+            <a href="{% url 'book_now' doctor.user.id %}">
+                <button class="book" type="button">Book Now</button>
+            </a>
+         </div>
+
+        {% endfor %}
+    {% else %}
+    <p>No doctors found for the selected speciality.</p>
+{% endif %}
+</div>
+
+{% endblock %}

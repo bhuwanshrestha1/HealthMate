@@ -1,0 +1,166 @@
+{% extends 'doctor_base.html' %}
+{% block head %}
+    {% load static %}
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+        }
+
+        img {
+            margin-right: 20px;
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 50%;
+        }
+
+        .review-button {
+            background-color: peru;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .review-button:hover {
+            background-color: red;
+        }
+        .submit-button {
+          background-color: peru;
+          padding: 10px 20px;
+          font-size: 16px;
+          color: #fff;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+          display: inline-block;
+          text-decoration: none;
+      }
+
+      .submit-button:hover {
+          background-color: red;
+      }
+        .no-appointments {
+            text-align: center;
+            margin-top: 20px;
+            color: #888;
+        }
+
+        .file-label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        /* Add a class to style the "Clear" button */
+        .clear-button {
+            background-color: #ddd;
+            padding: 5px 10px;
+            font-size: 14px;
+            color: #333;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            text-decoration: none;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <h2>Review Appointment</h2>
+  
+    {% if appointment %}
+        <ul>
+            <li>
+                {% if appointment.patient.profile_image %}
+                    <img src="{{ appointment.patient.profile_image.url }}" alt="Patient Picture">
+                {% endif %}
+                <div>
+                    <strong>Patient:</strong> {{ appointment.patient.first_name }} {{ appointment.patient.last_name }}
+                </div>
+            </li>
+            <li><strong>Age: </strong>  {{ appointment.patient.age }}</li>
+            <li><strong>Appointment ID: </strong>  {{ appointment.id }}</li>
+            <li><strong>Appointment Date: </strong>  {{ appointment.appointment_date }}</li>
+            <li><strong>Appointment Time: </strong>  {{ appointment.appointment_time }}</li>
+            <li><strong>Reason:</strong> {{ appointment.reason }}</li>
+            <li>
+                {% if appointment.old_reports %}
+                    <strong>File:</strong> <a href="{{ appointment.old_reports.url }}" target="_blank">View File <a href="{{ appointment.old_reports.url }}" download>
+                      <img src="/static/down.png" width="20px" height="20px" style="margin-left: 10px;" >
+                  </a>
+                {% else %}
+                    <strong>File:</strong> No File
+                {% endif %}
+            </li>
+            <li>
+                <form id="reviewForm" method="post" enctype="multipart/form-data" action="{% url 'review' appointment_id=appointment.id %}">
+                    {% csrf_token %}
+                    <label for="new_report_files">Upload New Reports:</label>
+                    <input type="file" name="new_report_files" multiple onchange="updateFileName(this)">
+                    <span class="file-label" id="fileNameLabel"></span>
+                    <button class="clear-button" type="button" onclick="clearFileInput()">Clear</button>
+                    <br>
+                    <br>
+                    <label for="status">Appointment Status:</label>
+                    <input type="checkbox" name="status" {% if appointment.status == 'complete' %}checked{% endif %}>
+                    Complete
+                    <br><br>
+                    <button class="submit-button" type="submit">Save Changes</button>
+                </form>
+            </li>
+            
+        </ul>
+    {% else %}
+        <p class="no-appointments">No appointment details available.</p>
+    {% endif %}
+  
+    <a href="{% url 'doctor_appointments' %}" class="review-button">Back to Appointments</a>
+
+    <script>
+        function submitForm() {
+            document.getElementById("reviewForm").submit();
+        }
+
+        function updateFileName(input) {
+            var fileNameLabel = document.getElementById("fileNameLabel");
+            if (input.files.length > 0) {
+                fileNameLabel.innerText = "Selected file: " + input.files[0].name;
+            } else {
+                fileNameLabel.innerText = "";
+            }
+        }
+
+        function clearFileInput() {
+            var fileInput = document.querySelector('input[name="new_report_files"]');
+            fileInput.value = null;
+            updateFileName(fileInput);
+        }
+    </script>
+{% endblock %}

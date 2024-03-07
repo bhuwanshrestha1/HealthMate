@@ -1,0 +1,13 @@
+{% extends 'doctor_base.html' %}
+{% block content %}
+  <h2>Review Appointment</h2>
+  
+  <p>Appointment Details:</p>
+  <ul>
+    <li>ID: {{ appointment.id }}</li>
+    <li>Date: {{ appointment.date }}</li>
+    <!-- Add more details as needed -->
+  </ul>
+  
+  <a href="{% url 'doctor_appointments' %}">Back to Appointments</a>
+{% endblock %}

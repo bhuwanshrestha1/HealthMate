@@ -1,0 +1,146 @@
+{% extends 'patient_profile_base.html' %}
+{% block title %}Book Appointment | Recommendation{% endblock %}
+
+{% block head %}
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: #fff;
+            width: 1000px;
+            margin: auto;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            border-radius: 20px;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 80%; /* Adjusted width for better fit */
+            margin: auto; /* Center the form within the container */
+        }
+
+        label {
+            margin-bottom: 10px;
+            font-size: 16px;
+            align-self: flex-start; /* Align labels to the left */
+            color: #555; /* Adjusted label color */
+        }
+
+        select {
+            padding: 10px;
+            margin-bottom: 20px;
+            width: 100%; /* Make input fields full-width */
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        button {
+            background-color: peru;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Added transition for smooth hover effect */
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            background-color: #c70000;
+        }
+
+        .error-message {
+            background-color: red;  /* Dark red background color */
+            padding: 5px;
+            text-align: center;
+            margin-bottom: 10px;
+            width: fit-content;
+            height: 40px;
+            color: #ffffff;  /* White text color for better contrast */
+            border: 1px solid #c00000;  /* Dark red border color */
+            border-radius: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <br><br>
+    <h2>Book Recommendation</h2>
+    <form method="post" action="{% url 'book_recommendation' %}">
+        {% csrf_token %}
+
+        <!-- Display non-field errors -->
+        {% if form.non_field_errors %}
+            <div class="error-message">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <!-- Display errors for Symptom 1 -->
+        {% if form.symptom1.errors %}
+            <div class="error-message">
+                {{ form.symptom1.errors }}
+            </div>
+        {% endif %}
+        {{ form.symptom1.label_tag }}
+        {{ form.symptom1 }}
+
+        <!-- Display errors for Symptom 2 -->
+        {% if form.symptom2.errors %}
+            <div class="error-message">
+                {{ form.symptom2.errors }}
+            </div>
+        {% endif %}
+        {{ form.symptom2.label_tag }}
+        {{ form.symptom2 }}
+
+        <!-- Display errors for Symptom 3 -->
+        {% if form.symptom3.errors %}
+            <div class="error-message">
+                {{ form.symptom3.errors }}
+            </div>
+        {% endif %}
+        {{ form.symptom3.label_tag }}
+        {{ form.symptom3 }}
+
+        <!-- Display errors for Symptom 4 -->
+        {% if form.symptom4.errors %}
+            <div class="error-message">
+                {{ form.symptom4.errors }}
+            </div>
+        {% endif %}
+        {{ form.symptom4.label_tag }}
+        {{ form.symptom4 }}
+
+        <button type="submit">Get Recommendation</button>
+    </form>
+    <br>
+    <a href="{% url 'book_appointment' %}" class="action-button">
+        <button type="submit">Back</button>
+    </a>
+</div>
+{% endblock %}

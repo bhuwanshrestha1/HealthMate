@@ -1,0 +1,265 @@
+{% extends 'patient_profile_base.html' %}
+{% block title %}Patient Home{% endblock %}
+{% block head %}
+<style>
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700");
+
+    
+    * {
+        margin: 0;
+        padding: 0;
+        outline: none;
+        border: none;
+        text-decoration: none;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+    }
+
+    body {
+        background: #f5f5f5;
+    }
+
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .main {
+        display: flex;
+       
+        justify-content: center;
+        align-items: center;
+        max-width: 800px;
+        width: 100%;
+        margin: 20px auto;
+        margin-left: 150px auto;
+    }
+    .disease_details {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        max-width: 1000px;
+        width: 100%;
+        margin: 20px auto;
+        margin-left: 150px auto;
+    }
+    .card {
+      width: 55%;
+        background: #fff;
+        text-align: center;
+        border-radius: 50px;
+        padding: 30px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        margin: 10px;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s ease-in-out;
+        display: flex;
+        
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+    }
+
+    .card h2 {
+        margin: 10px ;
+        text-transform: capitalize;
+        font-size: 1.5rem;
+    }
+
+    .card p {
+        font-size: 14px;
+        color: #555;
+    }
+
+    .card a {
+        color: #333;
+        text-decoration: none;
+    }
+
+    .card button {
+        background: peru;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-top: 15px;
+    }
+
+    .card button:hover {
+        background:red;
+        transform: scale(1.02);
+    }
+
+    .disease-details {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        max-width: 500px;
+        width: 80%;
+        margin: 10px auto;
+    }
+
+    .disease-card {
+        width: 500px;
+        margin: 20px auto;
+        margin-left: 150px auto;
+        background: #fff;
+        text-align: center;
+        border-radius: 50px;
+        padding: 10px;
+        box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+    }
+
+    .disease{
+      padding: 20px; 
+      border-radius: 10px;
+      
+      margin:20px auto;
+      margin-left: 500px auto;
+      
+      background: peru;
+    }
+
+    
+ 
+</style>
+{% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <h1 style="text-align: center;">Welcome to H-MATE, {{ user.first_name }}</h1>
+    {% endif %}
+    {% if messages %}
+    {% for message in messages %}
+        <div class="{% if message.tags %}alert alert-{{ message.tags }}{% endif %}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+    <section class="main">
+      <div class="card">
+        
+        <h2>Your Profile</h2>
+        <p>View and update your patient profile details.</p>
+    
+        <a href="/patient_details"><button>Go to Profile</button></a>
+</div>
+        
+        <div class="card">
+        
+          <h2>View My Appointment</h2>
+          <p>View my appointments with a specialist doctor.</p>
+      
+      <a href="/my_appointment"><button>View</button></a>
+  </div>
+
+        <div class="card">
+        
+                <h2>Book an Appointment</h2>
+                <p>Schedule an appointment with a specialist doctor.</p>
+            
+            <a href="/book_appointment"><button>Book Now</button></a>
+        </div>
+
+        
+      
+    </section>
+    
+    <h1 style="text-align: center;">Some common diseases</h1>
+
+   
+
+    <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+
+      <div class="disease">
+        
+
+          <div class="disease-details">
+      <div class="carousel-inner">
+
+        <div class="carousel-item active">
+          <div class="disease-card">
+            <h2>Common Cold</h2>
+            <p>The common cold is an infection of your nose, sinuses, throat and windpipe. Colds spread easily, especially within homes, classrooms and workplaces. More than 200 different viruses can cause colds. There's no cure for a common cold, but it usually goes away within a week to 10 days</p>
+           </div>
+
+           <div class="disease-card">
+          <h2>Tuberculosis</h2>
+          <p>Tuberculosis is a bacterial disease that is airborne. Tuberculosis, usually called TB by Nepali people, is one of the major diseases that affect people in the country.</p>
+           </div>
+
+          <div class="disease-card">
+          <h2>Typhoid</h2>
+          <p>Typhoid fever is common in places with poor sanitation and a lack of safe drinking water. Typhoid fever is usually spread through contaminated food or water.</p>
+          </div>
+
+        </div>
+
+        <div class="carousel-item">
+          <div class="disease-card">
+            <h2>Diarrhoea</h2>
+            <p>Diarrhoea is defined as the passage of three or more loose or liquid stools per day. Frequent passing of formed stools is not diarrhoea, nor is the passing of loose, "pasty" stools by breastfed babies.</p>
+           </div>
+
+           <div class="disease-card">
+          <h2>Jaundice</h2>
+          <p>A medical condition with yellowing of the skin or whites of the eyes, arising from excess of the pigment bilirubin and typically caused by obstruction of the bile duct, by liver disease, or by excessive breakdown of red blood cells.</p>
+           </div>
+
+          <div class="disease-card">
+          <h2>Rabies</h2>
+          <p>Rabies is a preventable viral disease most often transmitted through the bite of a rabid animal. The rabies virus infects the central nervous system of mammals, ultimately causing disease in the brain and death.</p>
+          </div>
+        </div>
+
+        <div class="carousel-item">
+          <div class="disease-card">
+            <h2>Influenza</h2>
+            <p>Flu is a contagious respiratory illness caused by influenza viruses that infect the nose, throat, and sometimes the lungs. It can cause mild to severe illness, and at times can lead to death.</p>
+           </div>
+
+           <div class="disease-card">
+          <h2>Malaria</h2>
+          <p>Malaria is a life-threatening disease caused by parasites that are transmitted to people through the bites of infected female Anopheles mosquitoes. It is preventable and curable.</p>
+           </div>
+
+          <div class="disease-card">
+          <h2>Diabetes</h2>
+          <p>Diabetes is a chronic (long-lasting) health condition that affects how your body turns food into energy. Your body breaks down most of the food you eat into sugar (glucose) and releases it into your bloodstream.</p>
+          </div>
+        </div>
+
+      </div>
+    
+  </div>
+    </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev" style="margin-left: 200px;">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next" style="margin-right: 200px;">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+
+   
+{% endblock %}
+
+  
+    
+      
+        
+  
+        
+   
+  
+  
+  
